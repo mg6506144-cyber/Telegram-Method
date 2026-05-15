@@ -404,7 +404,7 @@ methodButtons()
 );
 
 await ctx.reply(
-✨ Control Panel,
+`✨ Control Panel`,
 mainMenu()
 );
 
