@@ -1,5 +1,3 @@
-// index.js
-
 import { Telegraf, Markup } from "telegraf";
 import fs from "fs-extra";
 
@@ -57,33 +55,35 @@ function mainMenu() {
 
 function methodButtons() {
 
-  return Markup.inlineKeyboard([
+  return {
+    reply_markup: {
+      inline_keyboard: [
 
-    [
-      Markup.button.callback(
-        "💎 Telegram Method",
-        "view_Telegram"
-      ),
+        [
+          {
+            text: "💎 Telegram Method",
+            callback_data: "view_Telegram"
+          },
+          {
+            text: "🔥 Whatsapp Method",
+            callback_data: "view_Whatsapp"
+          }
+        ],
 
-      Markup.button.callback(
-        "🔥 Whatsapp Method",
-        "view_Whatsapp"
-      )
-    ],
+        [
+          {
+            text: "📘 Facebook Method",
+            callback_data: "view_Facebook"
+          },
+          {
+            text: "🎵 Tiktok Method",
+            callback_data: "view_Tiktok"
+          }
+        ]
 
-    [
-      Markup.button.callback(
-        "📘 Facebook Method",
-        "view_Facebook"
-      ),
-
-      Markup.button.callback(
-        "🎵 Tiktok Method",
-        "view_Tiktok"
-      )
-    ]
-
-  ]);
+      ]
+    }
+  };
 
 }
 
@@ -127,30 +127,34 @@ bot.start(async (ctx) => {
 `✨ Welcome To Global Method Bot
 
 📢 Please Join Required Channels First`,
-    Markup.inlineKeyboard([
+    {
+      reply_markup: {
+        inline_keyboard: [
 
-      [
-        Markup.button.url(
-          "🌍 Main Channel",
-          MAIN_CHANNEL
-        )
-      ],
+          [
+            {
+              text: "🌍 Main Channel",
+              url: MAIN_CHANNEL
+            }
+          ],
 
-      [
-        Markup.button.url(
-          "🔥 Global Channel",
-          GLOBAL_CHANNEL
-        )
-      ],
+          [
+            {
+              text: "🔥 Global Channel",
+              url: GLOBAL_CHANNEL
+            }
+          ],
 
-      [
-        Markup.button.callback(
-          "✅ Joined",
-          "joined"
-        )
-      ]
+          [
+            {
+              text: "✅ Joined",
+              callback_data: "joined"
+            }
+          ]
 
-    ])
+        ]
+      }
+    }
   );
 
 });
@@ -164,15 +168,13 @@ bot.action("joined", async (ctx) => {
   if (!joined) {
 
     return ctx.answerCbQuery(
-      "❌ Join All Channels First",
+      "❌ Join Global Channel First",
       { show_alert: true }
     );
 
   }
 
-  await ctx.deleteMessage();
-
-  await ctx.reply(
+  await ctx.editMessageText(
 `✨ Welcome
 
 🔥 Select Any Method Below`,
@@ -208,16 +210,11 @@ bot.hears("🏠 Main Menu", async (ctx) => {
 
 bot.action("main_menu", async (ctx) => {
 
-  await ctx.reply(
+  await ctx.editMessageText(
 `✨ Welcome Back
 
 🔥 Select Any Method Below`,
     methodButtons()
-  );
-
-  await ctx.reply(
-`✨ Control Panel`,
-    mainMenu()
   );
 
 });
@@ -234,31 +231,47 @@ bot.action("main_menu", async (ctx) => {
 
     if (countries.length === 0) {
 
-      return ctx.reply(
-        "❌ No Country Added"
+      return ctx.answerCbQuery(
+        "❌ No Country Added",
+        { show_alert: true }
       );
 
     }
 
     const buttons = countries.map(c => [
 
-      Markup.button.callback(
-        `🌍 ${c}`,
-        `country_${type}_${c}`
-      )
+      {
+        text: `🌍 ${c}`,
+        callback_data: `country_${type}_${c}`
+      }
 
     ]);
 
     buttons.push([
-      Markup.button.callback(
-        "🏠 Main Menu",
-        "main_menu"
-      )
+
+      {
+        text: "⬅️ Back Menu",
+        callback_data: "main_menu"
+      }
+
     ]);
 
-    ctx.reply(
+    buttons.push([
+
+      {
+        text: "🏠 Main Menu",
+        callback_data: "main_menu"
+      }
+
+    ]);
+
+    await ctx.editMessageText(
 `🌍 Select Country`,
-      Markup.inlineKeyboard(buttons)
+      {
+        reply_markup: {
+          inline_keyboard: buttons
+        }
+      }
     );
 
   });
@@ -268,6 +281,7 @@ bot.action("main_menu", async (ctx) => {
 /* ================= COUNTRY ================= */
 
 bot.action(/^country_(.+)_(.+)$/, async (ctx) => {
+
   const type = ctx.match[1];
   const country = ctx.match[2];
 
@@ -275,7 +289,7 @@ bot.action(/^country_(.+)_(.+)$/, async (ctx) => {
 
   const methods = db[type][country] || [];
 
-  ctx.reply(
+  await ctx.editMessageText(
 `✨ ${type} Method
 
 🌍 Country:
@@ -283,37 +297,48 @@ ${country}
 
 📦 Total Method:
 ${methods.length}`,
-    Markup.inlineKeyboard([
+    {
+      reply_markup: {
+        inline_keyboard: [
 
-      [
-        Markup.button.callback(
-          "📂 Show Method",
-          `show1_${type}_${country}`
-        )
-      ],
+          [
+            {
+              text: "📂 Show Method",
+              callback_data: `show1_${type}_${country}`
+            }
+          ],
 
-      [
-        Markup.button.callback(
-          "⚡ Show 5 Method",
-          `show5_${type}_${country}`
-        )
-      ],
+          [
+            {
+              text: "⚡ Show 5 Method",
+              callback_data: `show5_${type}_${country}`
+            }
+          ],
 
-      [
-        Markup.button.callback(
-          "🏠 Main Menu",
-          "main_menu"
-        )
-      ]
+          [
+            {
+              text: "⬅️ Back Menu",
+              callback_data: `view_${type}`
+            }
+          ],
 
-    ])
+          [
+            {
+              text: "🏠 Main Menu",
+              callback_data: "main_menu"
+            }
+          ]
+
+        ]
+      }
+    }
   );
 
 });
 
 /* ================= SHOW 1 ================= */
 
-bot.action(/show1_(.+)_(.+)/, async (ctx) => {
+bot.action(/^show1_(.+)_(.+)$/, async (ctx) => {
 
   const type = ctx.match[1];
   const country = ctx.match[2];
@@ -324,8 +349,9 @@ bot.action(/show1_(.+)_(.+)/, async (ctx) => {
 
   if (methods.length === 0) {
 
-    return ctx.reply(
-      "❌ No Method Available"
+    return ctx.answerCbQuery(
+      "❌ No Method Available",
+      { show_alert: true }
     );
 
   }
@@ -333,32 +359,43 @@ bot.action(/show1_(.+)_(.+)/, async (ctx) => {
   const random =
     methods[Math.floor(Math.random() * methods.length)];
 
-  ctx.reply(
+  await ctx.editMessageText(
 `${random}`,
-    Markup.inlineKeyboard([
+    {
+      reply_markup: {
+        inline_keyboard: [
 
-      [
-        Markup.button.callback(
-          "🔄 Change",
-          `show1_${type}_${country}`
-        )
-      ],
+          [
+            {
+              text: "🔄 Change",
+              callback_data: `show1_${type}_${country}`
+            }
+          ],
 
-      [
-        Markup.button.callback(
-          "🏠 Main Menu",
-          "main_menu"
-        )
-      ]
+          [
+            {
+              text: "⬅️ Back Menu",
+              callback_data: `country_${type}_${country}`
+            }
+          ],
 
-    ])
+          [
+            {
+              text: "🏠 Main Menu",
+              callback_data: "main_menu"
+            }
+          ]
+
+        ]
+      }
+    }
   );
 
 });
 
 /* ================= SHOW 5 ================= */
 
-bot.action(/show5_(.+)_(.+)/, async (ctx) => {
+bot.action(/^show5_(.+)_(.+)$/, async (ctx) => {
 
   const type = ctx.match[1];
   const country = ctx.match[2];
@@ -369,8 +406,9 @@ bot.action(/show5_(.+)_(.+)/, async (ctx) => {
 
   if (methods.length === 0) {
 
-    return ctx.reply(
-      "❌ No Method Available"
+    return ctx.answerCbQuery(
+      "❌ No Method Available",
+      { show_alert: true }
     );
 
   }
@@ -379,27 +417,39 @@ bot.action(/show5_(.+)_(.+)/, async (ctx) => {
     .sort(() => 0.5 - Math.random())
     .slice(0, 5);
 
-  ctx.reply(
+  await ctx.editMessageText(
 random.map((m,i)=>
-`${i+1}. ${m}`).join("\n\n"),
+`${i + 1}. ${m}`
+).join("\n\n"),
 
-    Markup.inlineKeyboard([
+    {
+      reply_markup: {
+        inline_keyboard: [
 
-      [
-        Markup.button.callback(
-          "🔄 Change",
-          `show5_${type}_${country}`
-        )
-      ],
+          [
+            {
+              text: "🔄 Change",
+              callback_data: `show5_${type}_${country}`
+            }
+          ],
 
-      [
-        Markup.button.callback(
-          "🏠 Main Menu",
-          "main_menu"
-        )
-      ]
+          [
+            {
+              text: "⬅️ Back Menu",
+              callback_data: `country_${type}_${country}`
+            }
+          ],
 
-    ])
+          [
+            {
+              text: "🏠 Main Menu",
+              callback_data: "main_menu"
+            }
+          ]
+
+        ]
+      }
+    }
   );
 
 });
@@ -418,6 +468,7 @@ bot.hears("👑 Admin Method", async (ctx) => {
 
       ["💎 Telegram", "🔥 Whatsapp"],
       ["📘 Facebook", "🎵 Tiktok"],
+      ["⬅️ Back Menu"],
       ["🏠 Main Menu"]
 
     ]).resize()
@@ -439,6 +490,7 @@ bot.hears("👤 User Method", async (ctx) => {
 
       ["💎 Telegram", "🔥 Whatsapp"],
       ["📘 Facebook", "🎵 Tiktok"],
+      ["⬅️ Back Menu"],
       ["🏠 Main Menu"]
 
     ]).resize()
@@ -464,6 +516,7 @@ bot.hears("🌍 Add Country", async (ctx) => {
 
       ["💎 Telegram", "🔥 Whatsapp"],
       ["📘 Facebook", "🎵 Tiktok"],
+      ["⬅️ Back Menu"],
       ["🏠 Main Menu"]
 
     ]).resize()
@@ -472,6 +525,17 @@ bot.hears("🌍 Add Country", async (ctx) => {
   userState[ctx.from.id] = {
     step: "country_add"
   };
+
+});
+
+/* ================= BACK MENU ================= */
+
+bot.hears("⬅️ Back Menu", async (ctx) => {
+
+  ctx.reply(
+`✨ Welcome Back`,
+    mainMenu()
+  );
 
 });
 
@@ -563,23 +627,38 @@ ${state.type}`,
 
     const buttons = countries.map(c => [
 
-      Markup.button.callback(
-        `🌍 ${c}`,
-        `admincountry_${map[text]}_${c}`
-      )
+      {
+        text: `🌍 ${c}`,
+        callback_data: `admincountry_${map[text]}_${c}`
+      }
 
     ]);
 
     buttons.push([
-      Markup.button.callback(
-        "🏠 Main Menu",
-        "main_menu"
-      )
+
+      {
+        text: "⬅️ Back Menu",
+        callback_data: "main_menu"
+      }
+
+    ]);
+
+    buttons.push([
+
+      {
+        text: "🏠 Main Menu",
+        callback_data: "main_menu"
+      }
+
     ]);
 
     return ctx.reply(
 `🌍 Select Country`,
-      Markup.inlineKeyboard(buttons)
+      {
+        reply_markup: {
+          inline_keyboard: buttons
+        }
+      }
     );
 
   }
@@ -606,23 +685,38 @@ ${state.type}`,
 
     const buttons = countries.map(c => [
 
-      Markup.button.callback(
-        `🌍 ${c}`,
-        `usercountry_${map[text]}_${c}`
-      )
+      {
+        text: `🌍 ${c}`,
+        callback_data: `usercountry_${map[text]}_${c}`
+      }
 
     ]);
 
     buttons.push([
-      Markup.button.callback(
-        "🏠 Main Menu",
-        "main_menu"
-      )
+
+      {
+        text: "⬅️ Back Menu",
+        callback_data: "main_menu"
+      }
+
+    ]);
+
+    buttons.push([
+
+      {
+        text: "🏠 Main Menu",
+        callback_data: "main_menu"
+      }
+
     ]);
 
     return ctx.reply(
 `🌍 Select Country`,
-      Markup.inlineKeyboard(buttons)
+      {
+        reply_markup: {
+          inline_keyboard: buttons
+        }
+      }
     );
 
   }
@@ -726,11 +820,32 @@ bot.action(/^admincountry_(.+)_(.+)$/, async (ctx) => {
 
   };
 
-  ctx.reply(
+  await ctx.editMessageText(
 `📝 Send Your Method
 
 📂 ${type}
-🌍 ${country}`
+🌍 ${country}`,
+    {
+      reply_markup: {
+        inline_keyboard: [
+
+          [
+            {
+              text: "⬅️ Back Menu",
+              callback_data: `view_${type}`
+            }
+          ],
+
+          [
+            {
+              text: "🏠 Main Menu",
+              callback_data: "main_menu"
+            }
+          ]
+
+        ]
+      }
+    }
   );
 
 });
@@ -738,6 +853,7 @@ bot.action(/^admincountry_(.+)_(.+)$/, async (ctx) => {
 /* ================= USER COUNTRY ================= */
 
 bot.action(/^usercountry_(.+)_(.+)$/, async (ctx) => {
+
   const type = ctx.match[1];
   const country = ctx.match[2];
 
@@ -749,18 +865,39 @@ bot.action(/^usercountry_(.+)_(.+)$/, async (ctx) => {
 
   };
 
-  ctx.reply(
+  await ctx.editMessageText(
 `📝 Send Your Method
 
 📂 ${type}
-🌍 ${country}`
+🌍 ${country}`,
+    {
+      reply_markup: {
+        inline_keyboard: [
+
+          [
+            {
+              text: "⬅️ Back Menu",
+              callback_data: `view_${type}`
+            }
+          ],
+
+          [
+            {
+              text: "🏠 Main Menu",
+              callback_data: "main_menu"
+            }
+          ]
+
+        ]
+      }
+    }
   );
 
 });
 
 /* ================= APPROVE ================= */
 
-bot.action(/approve_(.+)/, async (ctx) => {
+bot.action(/^approve_(.+)$/, async (ctx) => {
 
   if (ctx.from.id !== ADMIN_ID) {
     return;
@@ -795,15 +932,15 @@ bot.action(/approve_(.+)/, async (ctx) => {
 
   delete pendingMethods[id];
 
-  ctx.editMessageText(
-    "✅ Approved Successfully"
+  await ctx.editMessageText(
+`✅ Approved Successfully`
   );
 
 });
 
 /* ================= REJECT ================= */
 
-bot.action(/reject_(.+)/, async (ctx) => {
+bot.action(/^reject_(.+)$/, async (ctx) => {
 
   if (ctx.from.id !== ADMIN_ID) {
     return;
@@ -843,13 +980,13 @@ bot.action(/reject_(.+)/, async (ctx) => {
 
   delete pendingMethods[id];
 
-  ctx.editMessageText(
-    "❌ Rejected"
+  await ctx.editMessageText(
+`❌ Rejected`
   );
 
 });
 
-/* ================= BOT START ================= */
+/* ================= START BOT ================= */
 
 bot.launch();
 
