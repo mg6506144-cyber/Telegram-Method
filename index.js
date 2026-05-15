@@ -103,10 +103,10 @@ async function checkJoin(userId) {
       userId
     );
 
-    const ok1 = ["member","administrator","creator"]
+    const ok1 = ["member", "administrator", "creator"]
       .includes(main.status);
 
-    const ok2 = ["member","administrator","creator"]
+    const ok2 = ["member", "administrator", "creator"]
       .includes(global.status);
 
     return ok1 && ok2;
@@ -175,9 +175,9 @@ bot.action("joined", async (ctx) => {
   }
 
   await ctx.editMessageText(
-`𓆩✨𓆪 Welcome Smart User 
+`𓆩✨𓆪 Welcome Smart User
 
-𓆩📘𓆪 Pleases Select Your Method Below,
+𓆩📘𓆪 Please Select Your Method Below`,
     methodButtons()
   );
 
@@ -197,7 +197,7 @@ bot.hears("𓆩🏠𓆪 Main Menu", async (ctx) => {
   await ctx.reply(
 `𓆩✨𓆪 Welcome Back
 
-𓆩📘𓆪 Which Metthod Need Your 𓆩❓𓆪  Select  Method Below`,
+𓆩📘𓆪 Which Method Need Your 𓆩❓𓆪 Select Method Below`,
     methodButtons()
   );
 
@@ -213,9 +213,9 @@ bot.hears("𓆩🏠𓆪 Main Menu", async (ctx) => {
 bot.action("main_menu", async (ctx) => {
 
   await ctx.editMessageText(
-`𓆩✨𓆪 Welcome Back Smart User 
+`𓆩✨𓆪 Welcome Back Smart User
 
-𓆩📘𓆪 Please Selecte Any Method Below`,
+𓆩📘𓆪 Please Select Any Method Below`,
     methodButtons()
   );
 
@@ -223,7 +223,7 @@ bot.action("main_menu", async (ctx) => {
 
 /* ================= VIEW METHOD ================= */
 
-["Telegram","Whatsapp","Facebook","Tiktok"].forEach(type => {
+["Telegram", "Whatsapp", "Facebook", "Tiktok"].forEach(type => {
 
   bot.action(`view_${type}`, async (ctx) => {
 
@@ -234,7 +234,7 @@ bot.action("main_menu", async (ctx) => {
     if (countries.length === 0) {
 
       return ctx.answerCbQuery(
-        "𓆩❌𓆪 No Country Available Pleases Contact Admin ",
+        "𓆩❌𓆪 No Country Available Please Contact Admin",
         { show_alert: true }
       );
 
@@ -366,14 +366,14 @@ bot.action(/^show1_(.+)_(.+)$/, async (ctx) => {
           [
             {
               text: "𓆩🔄𓆪 Change",
-              callback_data: show1_${type}_${country}
+              callback_data: `show1_${type}_${country}`
             }
           ],
 
           [
             {
               text: "𓆩⬅️𓆪 Back Menu",
-              callback_data: country_${type}_${country}
+              callback_data: `country_${type}_${country}`
             }
           ],
 
@@ -416,7 +416,7 @@ bot.action(/^show5_(.+)_(.+)$/, async (ctx) => {
     .slice(0, 5);
 
   await ctx.editMessageText(
-random.map((m,i)=>
+random.map((m, i) =>
 `${i + 1}. ${m}`
 ).join("\n\n"),
 
@@ -458,6 +458,15 @@ bot.hears("𓆩👑𓆪 Admin Method", async (ctx) => {
 
   if (ctx.from.id !== ADMIN_ID) {
 
+    await bot.telegram.sendMessage(
+      ADMIN_ID,
+`🚨 User Clicked Admin Button
+
+👤 Name: ${ctx.from.first_name}
+🆔 ID: ${ctx.from.id}
+📛 Username: @${ctx.from.username || "NoUsername"}`
+    );
+
     return ctx.reply(
 `𓆩❌𓆪 This Button Is Only For Admin`
     );
@@ -468,7 +477,7 @@ bot.hears("𓆩👑𓆪 Admin Method", async (ctx) => {
 `𓆩👑𓆪 Select Method`,
     Markup.keyboard([
 
-      ["𓆩📱𓆪 Telegram", "𓆩💬𓆪whatsapp"],
+      ["𓆩📱𓆪 Telegram", "𓆩💬𓆪 Whatsapp"],
       ["𓆩📘𓆪 Facebook", "𓆩🎵𓆪 Tiktok"],
       ["𓆩⬅️𓆪 Back Menu"],
       ["𓆩🏠𓆪 Main Menu"]
@@ -515,11 +524,12 @@ bot.hears("𓆩🌍𓆪 Add Country", async (ctx) => {
     );
 
   }
+
   ctx.reply(
 `𓆩🌍𓆪 Select Method`,
     Markup.keyboard([
 
-      ["𓆩💬𓆪 Telegram", "𓆩💬𓆪 Whatsapp"],
+      ["𓆩📱𓆪 Telegram", "𓆩💬𓆪 Whatsapp"],
       ["𓆩📘𓆪 Facebook", "𓆩🎵𓆪 Tiktok"],
       ["𓆩⬅️𓆪 Back Menu"],
       ["𓆩🏠𓆪 Main Menu"]
