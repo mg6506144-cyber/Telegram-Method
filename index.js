@@ -45,7 +45,7 @@ function mainMenu() {
 
   return Markup.keyboard([
     ["👑 Admin Method", "👤 User Method"],
-    ["🌍 Add Country"],
+    ["🌍 Add Country", "🗑 Delete"],
     ["🏠 Main Menu"]
   ]).resize();
 
@@ -192,6 +192,8 @@ bot.action("joined", async (ctx) => {
 
 bot.hears("🏠 Main Menu", async (ctx) => {
 
+  delete userState[ctx.from.id];
+
   await ctx.reply(
 `✨ Welcome Back
 
@@ -248,21 +250,17 @@ bot.action("main_menu", async (ctx) => {
     ]);
 
     buttons.push([
-
       {
         text: "⬅️ Back Menu",
         callback_data: "main_menu"
       }
-
     ]);
 
     buttons.push([
-
       {
         text: "🏠 Main Menu",
         callback_data: "main_menu"
       }
-
     ]);
 
     await ctx.editMessageText(
@@ -458,9 +456,7 @@ random.map((m,i)=>
 
 bot.hears("👑 Admin Method", async (ctx) => {
 
-  if (ctx.from.id !== ADMIN_ID) {
-    return;
-  }
+  if (ctx.from.id !== ADMIN_ID) return;
 
   ctx.reply(
 `👑 Select Method`,
@@ -506,9 +502,7 @@ bot.hears("👤 User Method", async (ctx) => {
 
 bot.hears("🌍 Add Country", async (ctx) => {
 
-  if (ctx.from.id !== ADMIN_ID) {
-    return;
-  }
+  if (ctx.from.id !== ADMIN_ID) return;
 
   ctx.reply(
 `🌍 Select Method`,
@@ -528,9 +522,35 @@ bot.hears("🌍 Add Country", async (ctx) => {
 
 });
 
+/* ================= DELETE ================= */
+
+bot.hears("🗑 Delete", async (ctx) => {
+
+  if (ctx.from.id !== ADMIN_ID) return;
+
+  ctx.reply(
+`🗑 Select Method`,
+    Markup.keyboard([
+
+      ["💎 Telegram", "🔥 Whatsapp"],
+      ["📘 Facebook", "🎵 Tiktok"],
+      ["⬅️ Back Menu"],
+      ["🏠 Main Menu"]
+
+    ]).resize()
+  );
+
+  userState[ctx.from.id] = {
+    step: "delete_method_select"
+  };
+
+});
+
 /* ================= BACK MENU ================= */
 
 bot.hears("⬅️ Back Menu", async (ctx) => {
+
+  delete userState[ctx.from.id];
 
   ctx.reply(
 `✨ Welcome Back`,
@@ -557,6 +577,52 @@ bot.on("text", async (ctx) => {
     "🎵 Tiktok": "Tiktok"
 
   };
+
+  /* ================= DELETE SELECT ================= */
+
+  if (
+    state.step === "delete_method_select" &&
+    map[text]
+  ) {
+
+    const type = map[text];
+
+    const db = loadDB();
+
+    const countries = Object.keys(db[type]);
+
+    if (countries.length === 0) {
+
+      return ctx.reply("❌ No Country Added");
+
+    }
+
+    const buttons = countries.map(c => [
+
+      {
+        text: `🌍 ${c}`,
+        callback_data: `deletecountry_${type}_${c}`
+      }
+
+    ]);
+
+    buttons.push([
+      {
+        text: "🏠 Main Menu",
+        callback_data: "main_menu"
+      }
+    ]);
+
+    return ctx.reply(
+`🌍 Select Country`,
+      {
+        reply_markup: {
+          inline_keyboard: buttons
+        }
+      }
+    );
+
+  }
 
   /* ================= COUNTRY ADD ================= */
 
@@ -635,21 +701,17 @@ ${state.type}`,
     ]);
 
     buttons.push([
-
       {
         text: "⬅️ Back Menu",
         callback_data: "main_menu"
       }
-
     ]);
 
     buttons.push([
-
       {
         text: "🏠 Main Menu",
         callback_data: "main_menu"
       }
-
     ]);
 
     return ctx.reply(
@@ -693,21 +755,17 @@ ${state.type}`,
     ]);
 
     buttons.push([
-
       {
         text: "⬅️ Back Menu",
         callback_data: "main_menu"
       }
-
     ]);
 
     buttons.push([
-
       {
         text: "🏠 Main Menu",
         callback_data: "main_menu"
       }
-
     ]);
 
     return ctx.reply(
@@ -895,21 +953,150 @@ bot.action(/^usercountry_(.+)_(.+)$/, async (ctx) => {
 
 });
 
+/* ================= DELETE COUNTRY ================= */
+
+bot.action(/^deletecountry_(.+)_(.+)$/, async (ctx) => {
+
+  const type = ctx.match[1];
+  const country = ctx.match[2];
+
+  await ctx.editMessageText(
+`🗑 Delete Option
+
+📂 ${type}
+🌍 ${country}`,
+    {
+      reply_markup: {
+        inline_keyboard: [
+
+          [
+            {
+              text: "🗑 Delete Country",
+              callback_data: `delcountry_${type}_${country}`
+            }
+          ],
+
+          [
+            {
+              text: "🗑 Delete Method",
+              callback_data: `delmethod_${type}_${country}`
+            }
+          ],
+
+          [
+            {
+              text: "🏠 Main Menu",
+              callback_data: "main_menu"
+            }
+          ]
+
+        ]
+      }
+    }
+  );
+
+});
+
+/* ================= DELETE COUNTRY FINAL ================= */
+
+bot.action(/^delcountry_(.+)_(.+)$/, async (ctx) => {
+
+  const type = ctx.match[1];
+  const country = ctx.match[2];
+
+  const db = loadDB();
+
+  delete db[type][country];
+
+  saveDB(db);
+
+  await ctx.editMessageText(
+`✅ Country Deleted
+
+📂 ${type}
+🌍 ${country}`
+  );
+
+});
+
+/* ================= DELETE METHOD ================= */
+
+bot.action(/^delmethod_(.+)_(.+)$/, async (ctx) => {
+
+  const type = ctx.match[1];
+  const country = ctx.match[2];
+
+  const db = loadDB();
+
+  const methods = db[type][country] || [];
+
+  if (methods.length === 0) {
+
+    return ctx.answerCbQuery(
+      "❌ No Method Available",
+      { show_alert: true }
+    );
+
+  }
+
+  const buttons = methods.map((m, i) => [
+
+    {
+      text: `${i + 1}`,
+      callback_data: `finaldel_${type}_${country}_${i}`
+    }
+
+  ]);
+
+  buttons.push([
+    {
+      text: "🏠 Main Menu",
+      callback_data: "main_menu"
+    }
+  ]);
+
+  await ctx.editMessageText(
+`🗑 Select Method Number To Delete`,
+    {
+      reply_markup: {
+        inline_keyboard: buttons
+      }
+    }
+  );
+
+});
+
+/* ================= FINAL DELETE ================= */
+
+bot.action(/^finaldel_(.+)_(.+)_(.+)$/, async (ctx) => {
+
+  const type = ctx.match[1];
+  const country = ctx.match[2];
+  const index = Number(ctx.match[3]);
+
+  const db = loadDB();
+
+  db[type][country].splice(index, 1);
+
+  saveDB(db);
+
+  await ctx.editMessageText(
+`✅ Method Deleted Successfully`
+  );
+
+});
+
 /* ================= APPROVE ================= */
 
 bot.action(/^approve_(.+)$/, async (ctx) => {
 
-  if (ctx.from.id !== ADMIN_ID) {
-    return;
-  }
+  if (ctx.from.id !== ADMIN_ID) return;
 
   const id = ctx.match[1];
 
   const data = pendingMethods[id];
 
-  if (!data) {
-    return;
-  }
+  if (!data) return;
 
   const db = loadDB();
 
@@ -942,17 +1129,13 @@ bot.action(/^approve_(.+)$/, async (ctx) => {
 
 bot.action(/^reject_(.+)$/, async (ctx) => {
 
-  if (ctx.from.id !== ADMIN_ID) {
-    return;
-  }
+  if (ctx.from.id !== ADMIN_ID) return;
 
   const id = ctx.match[1];
 
   const data = pendingMethods[id];
 
-  if (!data) {
-    return;
-  }
+  if (!data) return;
 
   await bot.telegram.sendMessage(
     data.userId,
