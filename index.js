@@ -44,9 +44,9 @@ const pendingMethods = {};
 function mainMenu() {
 
   return Markup.keyboard([
-    ["👑 Admin Method", "👤 User Method"],
-    ["🌍 Add Country", "🗑 Delete"],
-    ["🏠 Main Menu"]
+    ["𓆩👑𓆪 Admin Method", "𓆩👤𓆪 User Method"],
+    ["𓆩🌍𓆪 Add Country", "𓆩🗑𓆪 Delete"],
+    ["𓆩🏠𓆪 Main Menu"]
   ]).resize();
 
 }
@@ -61,22 +61,22 @@ function methodButtons() {
 
         [
           {
-            text: "💎 Telegram Method",
+            text: "𓆩📱𓆪 Telegram Method",
             callback_data: "view_Telegram"
           },
           {
-            text: "🔥 Whatsapp Method",
+            text: "𓆩💬𓆪 Whatsapp Method",
             callback_data: "view_Whatsapp"
           }
         ],
 
         [
           {
-            text: "📘 Facebook Method",
+            text: "𓆩📘𓆪 Facebook Method",
             callback_data: "view_Facebook"
           },
           {
-            text: "🎵 Tiktok Method",
+            text: "𓆩🎵𓆪 Tiktok Method",
             callback_data: "view_Tiktok"
           }
         ]
@@ -124,30 +124,30 @@ async function checkJoin(userId) {
 bot.start(async (ctx) => {
 
   ctx.reply(
-`✨ Welcome To Global Method Bot
+`𓆩💬𓆪 Welcome To Global Method Bot
 
-📢 Please Join Required Channels First`,
+𓆩📢𓆪 Please Join Required Channels First`,
     {
       reply_markup: {
         inline_keyboard: [
 
           [
             {
-              text: "🌍 Main Channel",
+              text: "𓆩📢𓆪 Main Telegram Channel",
               url: MAIN_CHANNEL
             }
           ],
 
           [
             {
-              text: "🔥 Global Channel",
+              text: "𓆩🌍𓆪 Global Method Channel",
               url: GLOBAL_CHANNEL
             }
           ],
 
           [
             {
-              text: "✅ Joined",
+              text: "𓆩✅𓆪 Joined",
               callback_data: "joined"
             }
           ]
@@ -168,21 +168,21 @@ bot.action("joined", async (ctx) => {
   if (!joined) {
 
     return ctx.answerCbQuery(
-      "❌ Join Global Channel First",
+      "𓆩❌𓆪 Join Global Channel First",
       { show_alert: true }
     );
 
   }
 
   await ctx.editMessageText(
-`✨ Welcome
+`𓆩✨𓆪 Welcome Smart User 
 
-🔥 Select Any Method Below`,
+𓆩📘𓆪 Pleases Select Your Method Below,
     methodButtons()
   );
 
   await ctx.reply(
-`✨ Control Panel`,
+`𓆩✨𓆪 Control Panel Open`,
     mainMenu()
   );
 
@@ -190,19 +190,19 @@ bot.action("joined", async (ctx) => {
 
 /* ================= MAIN MENU ================= */
 
-bot.hears("🏠 Main Menu", async (ctx) => {
+bot.hears("𓆩🏠𓆪 Main Menu", async (ctx) => {
 
   delete userState[ctx.from.id];
 
   await ctx.reply(
-`✨ Welcome Back
+`𓆩✨𓆪 Welcome Back
 
-🔥 Select Any Method Below`,
+𓆩📘𓆪 Which Metthod Need Your 𓆩❓𓆪  Select  Method Below`,
     methodButtons()
   );
 
   await ctx.reply(
-`✨ Control Panel`,
+`𓆩✨𓆪 Control Panel`,
     mainMenu()
   );
 
@@ -213,9 +213,9 @@ bot.hears("🏠 Main Menu", async (ctx) => {
 bot.action("main_menu", async (ctx) => {
 
   await ctx.editMessageText(
-`✨ Welcome Back
+`𓆩✨𓆪 Welcome Back Smart User 
 
-🔥 Select Any Method Below`,
+𓆩📘𓆪 Please Selecte Any Method Below`,
     methodButtons()
   );
 
@@ -234,7 +234,7 @@ bot.action("main_menu", async (ctx) => {
     if (countries.length === 0) {
 
       return ctx.answerCbQuery(
-        "❌ No Country Added",
+        "𓆩❌𓆪 No Country Available Pleases Contact Admin ",
         { show_alert: true }
       );
 
@@ -243,7 +243,7 @@ bot.action("main_menu", async (ctx) => {
     const buttons = countries.map(c => [
 
       {
-        text: `🌍 ${c}`,
+        text: `𓆩🌍𓆪 ${c}`,
         callback_data: `country_${type}_${c}`
       }
 
@@ -251,20 +251,20 @@ bot.action("main_menu", async (ctx) => {
 
     buttons.push([
       {
-        text: "⬅️ Back Menu",
+        text: "𓆩⬅️𓆪 Back Menu",
         callback_data: "main_menu"
       }
     ]);
 
     buttons.push([
       {
-        text: "🏠 Main Menu",
+        text: "𓆩🏠𓆪 Main Menu",
         callback_data: "main_menu"
       }
     ]);
 
     await ctx.editMessageText(
-`🌍 Select Country`,
+`𓆩🌍𓆪 Please Select Country`,
       {
         reply_markup: {
           inline_keyboard: buttons
@@ -288,12 +288,12 @@ bot.action(/^country_(.+)_(.+)$/, async (ctx) => {
   const methods = db[type][country] || [];
 
   await ctx.editMessageText(
-`✨ ${type} Method
+`𓆩✨𓆪 ${type} Method
 
-🌍 Country:
+𓆩🌍𓆪 Country:
 ${country}
 
-📦 Total Method:
+𓆩📦𓆪 Total Method:
 ${methods.length}`,
     {
       reply_markup: {
@@ -301,28 +301,28 @@ ${methods.length}`,
 
           [
             {
-              text: "📂 Show Method",
+              text: "𓆩📂𓆪 Show Method",
               callback_data: `show1_${type}_${country}`
             }
           ],
 
           [
             {
-              text: "⚡ Show 5 Method",
+              text: "𓆩⚡𓆪 Show 5 Method",
               callback_data: `show5_${type}_${country}`
             }
           ],
 
           [
             {
-              text: "⬅️ Back Menu",
+              text: "𓆩⬅️𓆪 Back Menu",
               callback_data: `view_${type}`
             }
           ],
 
           [
             {
-              text: "🏠 Main Menu",
+              text: "𓆩🏠𓆪 Main Menu",
               callback_data: "main_menu"
             }
           ]
@@ -348,7 +348,7 @@ bot.action(/^show1_(.+)_(.+)$/, async (ctx) => {
   if (methods.length === 0) {
 
     return ctx.answerCbQuery(
-      "❌ No Method Available",
+      "𓆩❌𓆪 No Method Available",
       { show_alert: true }
     );
 
@@ -365,21 +365,21 @@ bot.action(/^show1_(.+)_(.+)$/, async (ctx) => {
 
           [
             {
-              text: "🔄 Change",
-              callback_data: `show1_${type}_${country}`
+              text: "𓆩🔄𓆪 Change",
+              callback_data: show1_${type}_${country}
             }
           ],
 
           [
             {
-              text: "⬅️ Back Menu",
-              callback_data: `country_${type}_${country}`
+              text: "𓆩⬅️𓆪 Back Menu",
+              callback_data: country_${type}_${country}
             }
           ],
 
           [
             {
-              text: "🏠 Main Menu",
+              text: "𓆩🏠𓆪 Main Menu",
               callback_data: "main_menu"
             }
           ]
@@ -405,7 +405,7 @@ bot.action(/^show5_(.+)_(.+)$/, async (ctx) => {
   if (methods.length === 0) {
 
     return ctx.answerCbQuery(
-      "❌ No Method Available",
+      "𓆩❌𓆪 No Method Available",
       { show_alert: true }
     );
 
@@ -426,21 +426,21 @@ random.map((m,i)=>
 
           [
             {
-              text: "🔄 Change",
+              text: "𓆩🔄𓆪 Change",
               callback_data: `show5_${type}_${country}`
             }
           ],
 
           [
             {
-              text: "⬅️ Back Menu",
+              text: "𓆩⬅️𓆪 Back Menu",
               callback_data: `country_${type}_${country}`
             }
           ],
 
           [
             {
-              text: "🏠 Main Menu",
+              text: "𓆩🏠𓆪 Main Menu",
               callback_data: "main_menu"
             }
           ]
@@ -454,24 +454,24 @@ random.map((m,i)=>
 
 /* ================= ADMIN METHOD ================= */
 
-bot.hears("👑 Admin Method", async (ctx) => {
+bot.hears("𓆩👑𓆪 Admin Method", async (ctx) => {
 
   if (ctx.from.id !== ADMIN_ID) {
 
     return ctx.reply(
-`❌ This Button Is Only For Admin`
+`𓆩❌𓆪 This Button Is Only For Admin`
     );
 
   }
 
   ctx.reply(
-`👑 Select Method`,
+`𓆩👑𓆪 Select Method`,
     Markup.keyboard([
 
-      ["💎 Telegram", "🔥 Whatsapp"],
-      ["📘 Facebook", "🎵 Tiktok"],
-      ["⬅️ Back Menu"],
-      ["🏠 Main Menu"]
+      ["𓆩📱𓆪 Telegram", "𓆩💬𓆪whatsapp"],
+      ["𓆩📘𓆪 Facebook", "𓆩🎵𓆪 Tiktok"],
+      ["𓆩⬅️𓆪 Back Menu"],
+      ["𓆩🏠𓆪 Main Menu"]
 
     ]).resize()
   );
@@ -484,16 +484,16 @@ bot.hears("👑 Admin Method", async (ctx) => {
 
 /* ================= USER METHOD ================= */
 
-bot.hears("👤 User Method", async (ctx) => {
+bot.hears("𓆩👤𓆪 User Method", async (ctx) => {
 
   ctx.reply(
-`👤 Select Method`,
+`𓆩👤𓆪 Select Method`,
     Markup.keyboard([
 
-      ["💎 Telegram", "🔥 Whatsapp"],
-      ["📘 Facebook", "🎵 Tiktok"],
-      ["⬅️ Back Menu"],
-      ["🏠 Main Menu"]
+      ["𓆩📱𓆪 Telegram", "𓆩💬𓆪 Whatsapp"],
+      ["𓆩📘𓆪 Facebook", "𓆩🎵𓆪 Tiktok"],
+      ["𓆩⬅️𓆪 Back Menu"],
+      ["𓆩🏠𓆪 Main Menu"]
 
     ]).resize()
   );
@@ -506,23 +506,23 @@ bot.hears("👤 User Method", async (ctx) => {
 
 /* ================= ADD COUNTRY ================= */
 
-bot.hears("🌍 Add Country", async (ctx) => {
+bot.hears("𓆩🌍𓆪 Add Country", async (ctx) => {
 
   if (ctx.from.id !== ADMIN_ID) {
 
     return ctx.reply(
-`❌ This Button Is Only For Admin`
+`𓆩❌𓆪 This Button Is Only For Admin`
     );
 
   }
   ctx.reply(
-`🌍 Select Method`,
+`𓆩🌍𓆪 Select Method`,
     Markup.keyboard([
 
-      ["💎 Telegram", "🔥 Whatsapp"],
-      ["📘 Facebook", "🎵 Tiktok"],
-      ["⬅️ Back Menu"],
-      ["🏠 Main Menu"]
+      ["𓆩💬𓆪 Telegram", "𓆩💬𓆪 Whatsapp"],
+      ["𓆩📘𓆪 Facebook", "𓆩🎵𓆪 Tiktok"],
+      ["𓆩⬅️𓆪 Back Menu"],
+      ["𓆩🏠𓆪 Main Menu"]
 
     ]).resize()
   );
@@ -535,24 +535,24 @@ bot.hears("🌍 Add Country", async (ctx) => {
 
 /* ================= DELETE ================= */
 
-bot.hears("🗑 Delete", async (ctx) => {
+bot.hears("𓆩🗑𓆪 Delete", async (ctx) => {
 
   if (ctx.from.id !== ADMIN_ID) {
 
     return ctx.reply(
-`❌ This Button Is Only For Admin`
+`𓆩❌𓆪 This Button Is Only For Admin`
     );
 
   }
 
   ctx.reply(
-`🗑 Select Method`,
+`𓆩🗑𓆪 Select Method`,
     Markup.keyboard([
 
-      ["💎 Telegram", "🔥 Whatsapp"],
-      ["📘 Facebook", "🎵 Tiktok"],
-      ["⬅️ Back Menu"],
-      ["🏠 Main Menu"]
+      ["𓆩📱𓆪 Telegram", "𓆩💬𓆪 Whatsapp"],
+      ["𓆩📘𓆪 Facebook", "𓆩🎵𓆪 Tiktok"],
+      ["𓆩⬅️𓆪 Back Menu"],
+      ["𓆩🏠𓆪 Main Menu"]
 
     ]).resize()
   );
@@ -565,12 +565,12 @@ bot.hears("🗑 Delete", async (ctx) => {
 
 /* ================= BACK MENU ================= */
 
-bot.hears("⬅️ Back Menu", async (ctx) => {
+bot.hears("𓆩⬅️𓆪 Back Menu", async (ctx) => {
 
   delete userState[ctx.from.id];
 
   ctx.reply(
-`✨ Welcome Back`,
+`𓆩✨𓆪 Welcome Back`,
     mainMenu()
   );
 
@@ -588,10 +588,10 @@ bot.on("text", async (ctx) => {
 
   const map = {
 
-    "💎 Telegram": "Telegram",
-    "🔥 Whatsapp": "Whatsapp",
-    "📘 Facebook": "Facebook",
-    "🎵 Tiktok": "Tiktok"
+    "𓆩📱𓆪 Telegram": "Telegram",
+    "𓆩💬𓆪 Whatsapp": "Whatsapp",
+    "𓆩📘𓆪 Facebook": "Facebook",
+    "𓆩🎵𓆪 Tiktok": "Tiktok"
 
   };
 
@@ -610,14 +610,14 @@ bot.on("text", async (ctx) => {
 
     if (countries.length === 0) {
 
-      return ctx.reply("❌ No Country Added");
+      return ctx.reply("𓆩❌𓆪 No Country Added");
 
     }
 
     const buttons = countries.map(c => [
 
       {
-        text: `🌍 ${c}`,
+        text: `𓆩🌍𓆪 ${c}`,
         callback_data: `deletecountry_${type}_${c}`
       }
 
@@ -631,7 +631,7 @@ bot.on("text", async (ctx) => {
     ]);
 
     return ctx.reply(
-`🌍 Select Country`,
+`𓆩🌍𓆪 Select Country`,
       {
         reply_markup: {
           inline_keyboard: buttons
@@ -656,7 +656,7 @@ bot.on("text", async (ctx) => {
     };
 
     return ctx.reply(
-`🌍 Send New Country Name`
+`𓆩🌍𓆪 Send New Country Name`
     );
 
   }
@@ -676,12 +676,12 @@ bot.on("text", async (ctx) => {
     delete userState[ctx.from.id];
 
     return ctx.reply(
-`✅ Country Added Successfully
+`𓆩✅𓆪 Country Added Successfully
 
-🌍 Country:
+𓆩🌍𓆪 Country:
 ${text}
 
-📂 Method:
+𓆩📂𓆪 Method:
 ${state.type}`,
       mainMenu()
     );
@@ -703,7 +703,7 @@ ${state.type}`,
     if (countries.length === 0) {
 
       return ctx.reply(
-        "❌ No Country Added"
+        "𓆩❌𓆪 No Country Added"
       );
 
     }
@@ -711,7 +711,7 @@ ${state.type}`,
     const buttons = countries.map(c => [
 
       {
-        text: `🌍 ${c}`,
+        text: `𓆩🌍𓆪 ${c}`,
         callback_data: `admincountry_${map[text]}_${c}`
       }
 
@@ -719,20 +719,20 @@ ${state.type}`,
 
     buttons.push([
       {
-        text: "⬅️ Back Menu",
+        text: "𓆩⬅️𓆪 Back Menu",
         callback_data: "main_menu"
       }
     ]);
 
     buttons.push([
       {
-        text: "🏠 Main Menu",
+        text: "𓆩🏠𓆪 Main Menu",
         callback_data: "main_menu"
       }
     ]);
 
     return ctx.reply(
-`🌍 Select Country`,
+`𓆩🌍𓆪 Select Country`,
       {
         reply_markup: {
           inline_keyboard: buttons
@@ -757,7 +757,7 @@ ${state.type}`,
     if (countries.length === 0) {
 
       return ctx.reply(
-        "❌ No Country Added"
+        "𓆩❌𓆪 No Country Added"
       );
 
     }
@@ -765,7 +765,7 @@ ${state.type}`,
     const buttons = countries.map(c => [
 
       {
-        text: `🌍 ${c}`,
+        text: `𓆩🌍𓆪 ${c}`,
         callback_data: `usercountry_${map[text]}_${c}`
       }
 
@@ -773,20 +773,20 @@ ${state.type}`,
 
     buttons.push([
       {
-        text: "⬅️ Back Menu",
+        text: "𓆩⬅️𓆪 Back Menu",
         callback_data: "main_menu"
       }
     ]);
 
     buttons.push([
       {
-        text: "🏠 Main Menu",
+        text: "𓆩🏠𓆪 Main Menu",
         callback_data: "main_menu"
       }
     ]);
 
     return ctx.reply(
-`🌍 Select Country`,
+`𓆩🌍𓆪 Select Country`,
       {
         reply_markup: {
           inline_keyboard: buttons
@@ -810,10 +810,10 @@ ${state.type}`,
     delete userState[ctx.from.id];
 
     return ctx.reply(
-`✅ Method Added Successfully
+`𓆩✅𓆪 Method Added Successfully
 
-📂 ${state.type}
-🌍 ${state.country}`,
+𓆩📂𓆪 ${state.type}
+𓆩🌍𓆪 ${state.country}`,
       mainMenu()
     );
 
@@ -839,12 +839,12 @@ ${state.type}`,
     await bot.telegram.sendMessage(
       ADMIN_ID,
 
-`👤 New Method Request
+`𓆩👤𓆪 New Method Request
 
-📂 ${state.type}
-🌍 ${state.country}
+𓆩📂𓆪 ${state.type}
+𓆩🌍𓆪 ${state.country}
 
-📝 Method:
+𓆩📝𓆪 Method:
 
 ${text}`,
 
@@ -854,12 +854,12 @@ ${text}`,
 
             [
               {
-                text: "✅ Approve",
+                text: "𓆩✅𓆪 Approve",
                 callback_data: `approve_${id}`
               },
 
               {
-                text: "❌ Reject",
+                text: "𓆩❌𓆪 Reject",
                 callback_data: `reject_${id}`
               }
             ]
@@ -870,9 +870,9 @@ ${text}`,
     );
 
     return ctx.reply(
-`✅ Method Sent To Admin
+`𓆩✅𓆪 Method Sent To Admin
 
-⏳ Wait For Approval`,
+𓆩⏳𓆪 Wait For Approval`,
       mainMenu()
     );
 
@@ -896,24 +896,24 @@ bot.action(/^admincountry_(.+)_(.+)$/, async (ctx) => {
   };
 
   await ctx.editMessageText(
-`📝 Send Your Method
+`𓆩📝𓆪 Send Your Method
 
-📂 ${type}
-🌍 ${country}`,
+𓆩📂𓆪 ${type}
+𓆩🌍𓆪 ${country}`,
     {
       reply_markup: {
         inline_keyboard: [
 
           [
             {
-              text: "⬅️ Back Menu",
+              text: "𓆩⬅️𓆪 Back Menu",
               callback_data: `view_${type}`
             }
           ],
 
           [
             {
-              text: "🏠 Main Menu",
+              text: "𓆩🏠𓆪 Main Menu",
               callback_data: "main_menu"
             }
           ]
@@ -941,24 +941,24 @@ bot.action(/^usercountry_(.+)_(.+)$/, async (ctx) => {
   };
 
   await ctx.editMessageText(
-`📝 Send Your Method
+`𓆩📝𓆪 Send Your Method
 
-📂 ${type}
-🌍 ${country}`,
+𓆩📂𓆪 ${type}
+𓆩🌍𓆪 ${country}`,
     {
       reply_markup: {
         inline_keyboard: [
 
           [
             {
-              text: "⬅️ Back Menu",
+              text: "𓆩⬅️𓆪 Back Menu",
               callback_data: `view_${type}`
             }
           ],
 
           [
             {
-              text: "🏠 Main Menu",
+              text: "𓆩🏠𓆪 Main Menu",
               callback_data: "main_menu"
             }
           ]
@@ -978,24 +978,24 @@ bot.action(/^deletecountry_(.+)_(.+)$/, async (ctx) => {
   const country = ctx.match[2];
 
   await ctx.editMessageText(
-`🗑 Delete Option
+`𓆩🗑𓆪 Delete Option
 
-📂 ${type}
-🌍 ${country}`,
+𓆩📂𓆪 ${type}
+𓆩🌍𓆪 ${country}`,
     {
       reply_markup: {
         inline_keyboard: [
 
           [
             {
-              text: "🗑 Delete Country",
+              text: "𓆩🗑𓆪 Delete Country",
               callback_data: `delcountry_${type}_${country}`
             }
           ],
 
           [
             {
-              text: "🗑 Delete Method",
+              text: "𓆩🗑𓆪 Delete Method",
               callback_data: `delmethod_${type}_${country}`
             }
           ],
@@ -1028,10 +1028,10 @@ bot.action(/^delcountry_(.+)_(.+)$/, async (ctx) => {
   saveDB(db);
 
   await ctx.editMessageText(
-`✅ Country Deleted
+`𓆩✅𓆪 Country Deleted
 
-📂 ${type}
-🌍 ${country}`
+𓆩📂𓆪 ${type}
+𓆩🌍𓆪 ${country}`
   );
 
 });
@@ -1050,7 +1050,7 @@ bot.action(/^delmethod_(.+)_(.+)$/, async (ctx) => {
   if (methods.length === 0) {
 
     return ctx.answerCbQuery(
-      "❌ No Method Available",
+      "𓆩❌𓆪 No Method Available",
       { show_alert: true }
     );
 
@@ -1067,13 +1067,13 @@ bot.action(/^delmethod_(.+)_(.+)$/, async (ctx) => {
 
   buttons.push([
     {
-      text: "🏠 Main Menu",
+      text: "𓆩🏠𓆪 Main Menu",
       callback_data: "main_menu"
     }
   ]);
 
   await ctx.editMessageText(
-`🗑 Select Method Number To Delete`,
+`𓆩🗑𓆪 Select Method Number To Delete`,
     {
       reply_markup: {
         inline_keyboard: buttons
@@ -1098,7 +1098,7 @@ bot.action(/^finaldel_(.+)_(.+)_(.+)$/, async (ctx) => {
   saveDB(db);
 
   await ctx.editMessageText(
-`✅ Method Deleted Successfully`
+`𓆩✅𓆪 Method Deleted Successfully`
   );
 
 });
@@ -1125,19 +1125,19 @@ bot.action(/^approve_(.+)$/, async (ctx) => {
   await bot.telegram.sendMessage(
     data.userId,
 
-`✅ Your Method Approved
+`𓆩✅𓆪 Your Method Approved
 
-📂 ${data.type}
-🌍 ${data.country}
+𓆩📂𓆪 ${data.type}
+𓆩🌍𓆪 ${data.country}
 
-🎉 Thanks For Sharing`,
+𓆩🎉𓆪 Thanks For Sharing Working Method`,
     mainMenu()
   );
 
   delete pendingMethods[id];
 
   await ctx.editMessageText(
-`✅ Approved Successfully`
+`𓆩✅𓆪 Approved Successfully`
   );
 
 });
@@ -1157,10 +1157,10 @@ bot.action(/^reject_(.+)$/, async (ctx) => {
   await bot.telegram.sendMessage(
     data.userId,
 
-`❌ Your Method Rejected
+`𓆩❌𓆪 Your Method Rejected
 
-📂 ${data.type}
-🌍 ${data.country}`,
+𓆩📂𓆪 ${data.type}
+𓆩🌍𓆪 ${data.country}`,
 
     {
       reply_markup: {
@@ -1168,7 +1168,7 @@ bot.action(/^reject_(.+)$/, async (ctx) => {
 
           [
             {
-              text: "🆘 Support",
+              text: "𓆩🆘𓆪 Support",
               url: SUPPORT_LINK
             }
           ]
@@ -1181,7 +1181,7 @@ bot.action(/^reject_(.+)$/, async (ctx) => {
   delete pendingMethods[id];
 
   await ctx.editMessageText(
-`❌ Rejected`
+`𓆩❌𓆪 Rejected`
   );
 
 });
