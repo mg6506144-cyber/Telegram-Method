@@ -267,8 +267,7 @@ bot.action("main_menu", async (ctx) => {
 
 /* ================= COUNTRY ================= */
 
-bot.action(/country_(.+)_(.+)/, async (ctx) => {
-
+bot.action(/^country_(.+)_(.+)$/, async (ctx) => {
   const type = ctx.match[1];
   const country = ctx.match[2];
 
@@ -714,7 +713,7 @@ ${text}`,
 
 /* ================= ADMIN COUNTRY ================= */
 
-bot.action(/admincountry_(.+)_(.+)/, async (ctx) => {
+bot.action(/^admincountry_(.+)_(.+)$/, async (ctx) => {
 
   const type = ctx.match[1];
   const country = ctx.match[2];
@@ -738,8 +737,7 @@ bot.action(/admincountry_(.+)_(.+)/, async (ctx) => {
 
 /* ================= USER COUNTRY ================= */
 
-bot.action(/usercountry_(.+)_(.+)/, async (ctx) => {
-
+bot.action(/^usercountry_(.+)_(.+)$/, async (ctx) => {
   const type = ctx.match[1];
   const country = ctx.match[2];
 
