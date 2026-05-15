@@ -456,7 +456,13 @@ random.map((m,i)=>
 
 bot.hears("👑 Admin Method", async (ctx) => {
 
-  if (ctx.from.id !== ADMIN_ID) return;
+  if (ctx.from.id !== ADMIN_ID) {
+
+    return ctx.reply(
+`❌ This Button Is Only For Admin`
+    );
+
+  }
 
   ctx.reply(
 `👑 Select Method`,
@@ -502,8 +508,13 @@ bot.hears("👤 User Method", async (ctx) => {
 
 bot.hears("🌍 Add Country", async (ctx) => {
 
-  if (ctx.from.id !== ADMIN_ID) return;
+  if (ctx.from.id !== ADMIN_ID) {
 
+    return ctx.reply(
+`❌ This Button Is Only For Admin`
+    );
+
+  }
   ctx.reply(
 `🌍 Select Method`,
     Markup.keyboard([
@@ -526,7 +537,13 @@ bot.hears("🌍 Add Country", async (ctx) => {
 
 bot.hears("🗑 Delete", async (ctx) => {
 
-  if (ctx.from.id !== ADMIN_ID) return;
+  if (ctx.from.id !== ADMIN_ID) {
+
+    return ctx.reply(
+`❌ This Button Is Only For Admin`
+    );
+
+  }
 
   ctx.reply(
 `🗑 Select Method`,
