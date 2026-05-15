@@ -496,7 +496,7 @@ bot.hears("𓆩👑𓆪 Admin Method", async (ctx) => {
 bot.hears("𓆩👤𓆪 User Method", async (ctx) => {
 
   ctx.reply(
-`𓆩👤𓆪 Select Method`,
+`𓆩👤𓆪 Please Select Which Method You Want To Add`,
     Markup.keyboard([
 
       ["𓆩📱𓆪 Telegram", "𓆩💬𓆪 Whatsapp"],
@@ -635,7 +635,7 @@ bot.on("text", async (ctx) => {
 
     buttons.push([
       {
-        text: "🏠 Main Menu",
+        text: "𓆩🏠𓆪 Main Menu",
         callback_data: "main_menu"
       }
     ]);
@@ -906,7 +906,9 @@ bot.action(/^admincountry_(.+)_(.+)$/, async (ctx) => {
   };
 
   await ctx.editMessageText(
-`𓆩📝𓆪 Send Your Method
+`𓆩📝𓆪 Please Share Your Working Method Here
+
+𓆩🌍𓆪 All Users Will Be Able To See This Method After Approval  𓆩✅𓆪
 
 𓆩📂𓆪 ${type}
 𓆩🌍𓆪 ${country}`,
@@ -951,7 +953,9 @@ bot.action(/^usercountry_(.+)_(.+)$/, async (ctx) => {
   };
 
   await ctx.editMessageText(
-`𓆩📝𓆪 Send Your Method
+`𓆩📝𓆪 Please Share Your Working Method Here
+
+𓆩🌍𓆪 All Users Will Be Able To See This Method After Approval  𓆩✅𓆪
 
 𓆩📂𓆪 ${type}
 𓆩🌍𓆪 ${country}`,
@@ -1012,7 +1016,7 @@ bot.action(/^deletecountry_(.+)_(.+)$/, async (ctx) => {
 
           [
             {
-              text: "🏠 Main Menu",
+              text: "𓆩🏠𓆪 Main Menu",
               callback_data: "main_menu"
             }
           ]
