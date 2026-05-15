@@ -1,0 +1,9 @@
+{
+  "name": "premium-method-bot",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "fs-extra": "^11.2.0",
+    "telegraf": "^4.16.3"
+  }
+}
